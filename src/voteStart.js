@@ -22,10 +22,8 @@ export default async function(event) {
 		'final': '',
 	});
 
-	const memberCount = (await event.fetchSubscribers()).size;
-
 	const message = await event.channel.send({
-		content: `Vote for the scrim type of **${grammarScrims}**. Vote will end when all ${memberCount} members voted. **0/${memberCount} votes**.`,
+		content: `Vote for the scrim type of **${grammarScrims}**. Vote will end when both igls voted. **0/2 votes**.`,
 		components: [new ActionRowBuilder().addComponents(buttons)],
 	});
 

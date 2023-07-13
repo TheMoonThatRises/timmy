@@ -1,4 +1,4 @@
-import { eventMessageCache, voteScrimTypeCache } from '../../assets/caches.js';
+import { eventMessageCache, rolesCache, voteScrimTypeCache } from '../../assets/caches.js';
 import mapStart from '../mapStart.js';
 
 async function updateVoteCount(eventID, interaction) {
@@ -7,11 +7,9 @@ async function updateVoteCount(eventID, interaction) {
 	const eventMessage = interaction.channel.messages.cache.get(eventMessageCache.get(eventID));
 	const event = interaction.guild.scheduledEvents.cache.get(eventID);
 
-	const totalSubscribers = (await event.fetchSubscribers()).size;
+	eventMessage.edit(eventMessage.content.slice(0, eventMessage.content.lastIndexOf('.', eventMessage.content.lastIndexOf('.') - 1)) + `. **${currentVoteCount}/2 votes**.`);
 
-	eventMessage.edit(eventMessage.content.slice(0, eventMessage.content.lastIndexOf('.', eventMessage.content.lastIndexOf('.') - 1)) + `. **${currentVoteCount}/${totalSubscribers} votes**.`);
-
-	if (currentVoteCount == totalSubscribers) {
+	if (currentVoteCount >= 2) {
 		const finalCounts = Object.keys(scrimCache.votes).map(key => ({ 'type': key, 'count': scrimCache.votes[key].length }));
 		voteScrimTypeCache.get(eventID).final = finalCounts.reduce((prev, next) => prev.count > next.count ? prev : next).type;
 		voteScrimTypeCache.write();
@@ -27,8 +25,8 @@ export async function run(interaction) {
 	const voteArr = voteScrimTypeCache.get(eventID).votes;
 	const userID = interaction.user.id;
 
-	if (!(await interaction.guild.scheduledEvents.cache.get(eventID).fetchSubscribers()).has(userID)) {
-		return await interaction.editReply('You have not subscribed to the event');
+	if (!interaction.member.roles.cache.has(rolesCache.get(eventID).igl)) {
+		return await interaction.editReply('Only igls are allowed to vote');
 	}
 
 	if (!Object.values(voteArr).flat().includes(userID)) {
