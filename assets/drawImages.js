@@ -2,8 +2,8 @@ import { createCanvas, loadImage, registerFont } from 'canvas';
 import { writeFileSync } from 'fs';
 import maps from './maps.js';
 
-const title = { x: 598, y: 198 };
-const body = { x: 598, y: 898 };
+const title = { x: 596, y: 198 };
+const body = { x: 596, y: 898 };
 const border = 4;
 
 registerFont('./assets/fonts/valorant.ttf', { family: 'valorant' });
@@ -83,8 +83,8 @@ export async function drawEmpty(selection, path) {
 
 	writeFileSync(path, canvas.toBuffer());
 }
-export const drawBan = async (map, pos, path) => drawMap(map, pos, path, true);
-export const drawPick = async (map, pos, path) => drawMap(map, pos, path, false);
+export const drawBan = async (map, pos, path) => await drawMap(map, pos, path, true);
+export const drawPick = async (map, pos, path) => await drawMap(map, pos, path, false);
 export async function drawSideSelection(team, side, pos, path) {
 	const image = await loadImage(path);
 
