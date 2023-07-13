@@ -1,11 +1,13 @@
-import { imageCache, mapPickBanSideSelectCache, rolesCache } from '../../assets/caches.js';
+import { eventMessageCache, imageCache, mapPickBanSideSelectCache, rolesCache } from '../../assets/caches.js';
 import { drawPick } from '../../assets/drawImages.js';
 import mapStart from '../mapStart.js';
 
 export async function run(interaction) {
+	const [, map, team, eventID] = interaction.customId.split('_');
+
+	await interaction.channel.messages.cache.get(eventMessageCache.get(eventID)).edit({ components: [] });
 	await interaction.deferReply({ ephemeral: true });
 
-	const [, map, team, eventID] = interaction.customId.split('_');
 	const mapCache = mapPickBanSideSelectCache.get(eventID);
 
 	if (!interaction.member.roles.cache.has(rolesCache.get(eventID)[team]) && !interaction.member.roles.cache.has(rolesCache.get(eventID).igl)) {

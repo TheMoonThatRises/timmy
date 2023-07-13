@@ -57,23 +57,23 @@ export default async function(event, interaction) {
 
 	const eventMessage = interaction.channel.messages.cache.get(eventMessageCache.get(event.id));
 
-	console.log(mapCache.order.length);
-
 	if (mapCache.order.length <= 0) {
-		console.log('called message send new thing');
 		return await eventMessage.edit({
+			content: '',
 			files: [new AttachmentBuilder(canvas.toBuffer(), { name: 'selection.png' })],
+			components: [],
 		});
 	} else if (mapCache.order.length == 1) {
-		console.log('drawing new pic');
 		await drawPick(
 			Object.keys(maps).filter(map => !mapCache.selected.concat(mapCache.banned).includes(map)),
 			6,
 			imageCache.get(event.id),
 		);
-	}
+		mapCache.pos++;
 
-	console.log('going on to get team info');
+		canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+		canvas.getContext('2d').drawImage(await loadImage(imageCache.get(event.id)), 0, 0);
+	}
 
 	const team = interaction.guild.roles.cache.get(rolesCache.get(event.id)[mapCache.order[0][0]]);
 
