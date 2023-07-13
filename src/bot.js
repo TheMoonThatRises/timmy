@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { Client, Events, GatewayIntentBits, Partials } from 'discord.js';
 
-import { eventMessageCache, imageCache, mapPickBanSideSelectCache, rolesCache, voteScrimTypeCache } from '../assets/caches.js';
+import { eventMessageCache, imageCache, mapPickBanSideSelectCache, voteScrimTypeCache } from '../assets/caches.js';
 
 import { readdirSync, unlinkSync } from 'fs';
 
@@ -56,12 +56,14 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on(Events.GuildScheduledEventDelete, event => {
 	if (event.description.endsWith('Timmy generated event.')) {
-		rolesCache.delete(event.id);
 		voteScrimTypeCache.delete(event.id);
 		mapPickBanSideSelectCache.delete(event.id);
 		eventMessageCache.delete(event.id);
-		unlinkSync(imageCache.get(event.id));
 		imageCache.delete(event.id);
+
+		try {
+			unlinkSync(imageCache.get(event.id));
+		} catch { return; }
 	}
 });
 

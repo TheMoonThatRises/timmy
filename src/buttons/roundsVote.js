@@ -1,4 +1,4 @@
-import { eventMessageCache, rolesCache, voteScrimTypeCache } from '../../assets/caches.js';
+import { eventMessageCache, scrimInfoCache, voteScrimTypeCache } from '../../assets/caches.js';
 import mapStart from '../mapStart.js';
 
 async function updateVoteCount(eventID, interaction) {
@@ -25,7 +25,7 @@ export async function run(interaction) {
 	const voteArr = voteScrimTypeCache.get(eventID).votes;
 	const userID = interaction.user.id;
 
-	if (!interaction.member.roles.cache.has(rolesCache.get(eventID).igl)) {
+	if (!interaction.member.roles.cache.has(scrimInfoCache.get(interaction.guild.id).igl)) {
 		return await interaction.editReply('Only igls are allowed to vote');
 	}
 

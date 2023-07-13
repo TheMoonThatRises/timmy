@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, GuildScheduledEventStatus } from 'discord.js';
-import { eventMessageCache, voteScrimTypeCache } from '../assets/caches.js';
+import { eventMessageCache, scrimInfoCache, voteScrimTypeCache } from '../assets/caches.js';
 
 export default async function(event) {
 	if (!event.isActive()) {
@@ -22,7 +22,7 @@ export default async function(event) {
 		'final': '',
 	});
 
-	const message = await event.channel.send({
+	const message = await event.guild.channels.cache.get(scrimInfoCache.get(event.guild.id).channel).send({
 		content: `Vote for the scrim type of **${grammarScrims}**. Vote will end when both igls voted. **0/2 votes**.`,
 		components: [new ActionRowBuilder().addComponents(buttons)],
 	});

@@ -1,4 +1,4 @@
-import { eventMessageCache, mapPickBanSideSelectCache, rolesCache } from '../../assets/caches.js';
+import { eventMessageCache, mapPickBanSideSelectCache, scrimInfoCache } from '../../assets/caches.js';
 import { drawSideSelection } from '../../assets/drawImages.js';
 import mapStart from '../mapStart.js';
 
@@ -9,9 +9,9 @@ export async function run(interaction) {
 	await interaction.deferReply({ ephemeral: true });
 
 	const mapCache = mapPickBanSideSelectCache.get(eventID);
-	const team = interaction.guild.roles.cache.get(rolesCache.get(eventID)[mapCache.order[0][0]]);
+	const team = interaction.guild.roles.cache.get(scrimInfoCache.get(interaction.guild.id)[mapCache.order[0][0]]);
 
-	if (!interaction.member.roles.cache.has(team.id) && !interaction.member.roles.cache.has(rolesCache.get(eventID).igl)) {
+	if (!interaction.member.roles.cache.has(team.id) && !interaction.member.roles.cache.has(scrimInfoCache.get(interaction.guild.id).igl)) {
 		return await interaction.editReply('Only the igl of the team is allowed to vote');
 	}
 

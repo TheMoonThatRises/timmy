@@ -1,5 +1,5 @@
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { eventMessageCache, imageCache, mapPickBanSideSelectCache, rolesCache, voteScrimTypeCache } from '../assets/caches.js';
+import { eventMessageCache, imageCache, mapPickBanSideSelectCache, scrimInfoCache, voteScrimTypeCache } from '../assets/caches.js';
 import maps from '../assets/maps.js';
 import { capitalise, drawEmpty, drawPick } from '../assets/drawImages.js';
 import { createCanvas, loadImage } from 'canvas';
@@ -24,9 +24,9 @@ function genSelectOrder(scrimStyle) {
 }
 
 export default async function(event, interaction) {
-	if (!mapPickBanSideSelectCache.has(event.id)) {
-		const scrimStyle = voteScrimTypeCache.get(event.id).final.toLowerCase();
+	const scrimStyle = voteScrimTypeCache.get(event.id).final.toLowerCase();
 
+	if (!mapPickBanSideSelectCache.has(event.id)) {
 		mapPickBanSideSelectCache.set(event.id, {
 			'selected': [],
 			'banned': [],
@@ -41,7 +41,7 @@ export default async function(event, interaction) {
 
 		await drawEmpty(
 			mapPickBanSideSelectCache.get(event.id).order.map(element => [
-				interaction.guild.roles.cache.get(rolesCache.get(event.id)[element[0]]).name,
+				interaction.guild.roles.cache.get(scrimInfoCache.get(event.guild.id)[element[0]]).name,
 				element[1],
 			]),
 			imageCache.get(event.id),
@@ -58,6 +58,7 @@ export default async function(event, interaction) {
 	const eventMessage = interaction.channel.messages.cache.get(eventMessageCache.get(event.id));
 
 	if (mapCache.order.length <= 0) {
+		event.setScheduledEndTime(event.scheduledStartTimestamp + (60 + 1000) * Number(scrimStyle.slice(-1)));
 		return await eventMessage.edit({
 			content: '',
 			files: [new AttachmentBuilder(canvas.toBuffer(), { name: 'selection.png' })],
@@ -75,7 +76,7 @@ export default async function(event, interaction) {
 		canvas.getContext('2d').drawImage(await loadImage(imageCache.get(event.id)), 0, 0);
 	}
 
-	const team = interaction.guild.roles.cache.get(rolesCache.get(event.id)[mapCache.order[0][0]]);
+	const team = interaction.guild.roles.cache.get(scrimInfoCache.get(event.guild.id)[mapCache.order[0][0]]);
 
 	const isBan = mapCache.order[0][1] == 'ban';
 	const isBanSelect = mapCache.order[0][1] != 'pick';
