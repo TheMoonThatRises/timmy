@@ -11,7 +11,7 @@ async function updateVoteCount(eventID, interaction) {
 
 	if (currentVoteCount >= 2) {
 		const finalCounts = Object.keys(scrimCache.votes).map(key => ({ 'type': key, 'count': scrimCache.votes[key].length }));
-		voteScrimTypeCache.get(eventID).final = finalCounts.reduce((prev, next) => prev.count > next.count ? prev : next).type;
+		voteScrimTypeCache.get(eventID).final = finalCounts.reduce((prev, next) => prev.count < next.count ? next : prev).type;
 		voteScrimTypeCache.write();
 		mapStart(event, interaction);
 	}
