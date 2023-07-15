@@ -39,4 +39,4 @@ export const data = new SlashCommandBuilder()
 		.setDescription('Sets the description of the scrim event')
 		.setRequired(true),
 	)
-	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuildExpressions);
+	.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents);

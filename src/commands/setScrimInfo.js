@@ -68,4 +68,4 @@ export const data = new SlashCommandBuilder()
 		.setDescription('Sets the event banner image')
 		.setRequired(false),
 	)
-	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuildExpressions);
+	.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents);

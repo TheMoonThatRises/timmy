@@ -29,4 +29,4 @@ export const data = new SlashCommandBuilder()
 		.setAutocomplete(true)
 		.setRequired(true),
 	)
-	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuildExpressions);
+	.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents);
