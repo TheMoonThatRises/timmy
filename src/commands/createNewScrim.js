@@ -6,6 +6,7 @@ export async function run(interaction) {
 	await interaction.deferReply({ ephemeral: true });
 
 	const startTime = interaction.options.get('unixdate').value;
+	const bannerImg = scrimInfoCache.get(interaction.guild.id)?.bannerimg;
 
 	await interaction.guild.scheduledEvents.create({
 		name: interaction.options.get('scrimname').value,
@@ -14,7 +15,7 @@ export async function run(interaction) {
 		privacyLevel: 2,
 		entityType: 3,
 		entityMetadata: { location: 'Right here' },
-		image: Buffer.from((await axios.get(scrimInfoCache.get(interaction.guild.id).bannerimg, { responseType: 'arraybuffer' })).data, 'utf-8'),
+		image: bannerImg ? Buffer.from((await axios.get(scrimInfoCache.get(interaction.guild.id).bannerimg, { responseType: 'arraybuffer' })).data, 'utf-8') : null,
 		description: `${interaction.options.get('scrimdesc').value}. Timmy generated event.`,
 	});
 
