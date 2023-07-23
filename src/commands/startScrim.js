@@ -12,8 +12,6 @@ export async function run(interaction) {
 
 	await interaction.editReply(`Starting event ${event.name} - ${event.id} scrim early`);
 
-	event.setStatus(GuildScheduledEventStatus.Active, 'Scrim started');
-
 	voteStart(event);
 }
 export async function autocomplete(interaction) {
