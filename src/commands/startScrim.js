@@ -18,7 +18,7 @@ export async function run(interaction) {
 }
 export async function autocomplete(interaction) {
 	const focusedValue = interaction.options.getFocused();
-	const choices = interaction.guild.scheduledEvents.cache.filter(event => event.isScheduled()).map(event => ({ 'name': event.name, 'value': event.id }));
+	const choices = interaction.guild.scheduledEvents.cache.filter(event => event.isScheduled() || event.isActive()).map(event => ({ 'name': event.name, 'value': event.id }));
 	const filtered = choices.filter(event => event.name.startsWith(focusedValue));
 	await interaction.respond(filtered);
 }
